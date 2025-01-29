@@ -41,7 +41,7 @@ npm run dev
 Buat baru file bernama .env, copy semua konten di .env.example :
 
 ```
-./Elearning-App-Laravel/.env.example
+.env.example
 ```
 
 Jalankan migrasi dan seed database :
