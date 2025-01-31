@@ -58,7 +58,24 @@
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
-        
+
+                            <!-- Kategori -->
+                            <div>
+                                <label for="kategori" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
+                                <select id="kategori" name="kategori[]" multiple 
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    @foreach ($kategori as $kategori)
+                                        <option value="{{ $kategori->id }}" 
+                                            {{ in_array($kategori->id, old('kategori', $buku->kategori->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                            {{ $kategori->nama_kategori }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('kategori')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            
                             <!-- Gambar -->
                             <div>
                                 <label for="gambar" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gambar</label>

@@ -31,6 +31,22 @@
                                         {{ $buku->deskripsi ?? 'Deskripsi tidak tersedia.' }}
                                     </p>
                                 </div>
+
+                                {{-- Badge Kategori --}}
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Kategori:</strong></p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        @if ($buku->kategori->isEmpty())
+                                            <span class="text-gray-500">Tidak ada kategori</span>
+                                        @else
+                                            @foreach ($buku->kategori as $kategoriItem)
+                                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
+                                                    {{ $kategoriItem->nama_kategori }}
+                                                </span>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -65,18 +81,18 @@
                             
                         {{-- Navigasi --}}
                         <div class="mt-6 flex space-x-4">
-                        <a href="{{ route('ulasan.create', ['buku_id' => $buku->id]) }}" 
-                           class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded ">
-                            ⭐ Rating
-                        </a>
+                            <a href="{{ route('ulasan.create', ['buku_id' => $buku->id]) }}" 
+                               class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded ">
+                                ⭐ Rating
+                            </a>
+                            <a href="{{ route('dashboard') }}" 
+                               class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded shadow">
+                                Kembali
+                            </a>
+                        </div>
                     @else
                         <p>Data buku tidak ditemukan.</p>
                     @endif
-                        <a href="{{ route('dashboard') }}" 
-                           class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded shadow">
-                            Kembali
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

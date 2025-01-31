@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\KategotiBuku;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
 
 class BukuController extends Controller
 {
-    // ambil data buku
     public function index () {
     $buku = Buku::all();
-
-    return view('buku.index', compact('buku'));
+    $kategori = KategotiBuku::all();
+    return view('buku.index', compact('buku','kategori'));
 
     }
 
@@ -24,7 +24,8 @@ class BukuController extends Controller
     }
 
     public function create() {
-        return view('buku.create');
+        $kategori = KategotiBuku::all();
+        return view('buku.create',compact('kategori'));
     }
 
     public function store(Request $request) {
@@ -35,9 +36,10 @@ class BukuController extends Controller
             'tahun_terbit' => ['required', 'integer', 'digits:4', 'min:1000', 'max:' . date('Y')],
             'deskripsi' => ['nullable', 'string'],
             'gambar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'kategori'=> ['exists:kategoti_bukus,id']
         ]);
     
-        $data = $request->all();
+        $data = $request->except('kategori');
     
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
@@ -46,7 +48,8 @@ class BukuController extends Controller
             $data['gambar'] = $filename; 
         }
     
-        Buku::create($data); 
+        $buku = Buku::create($data); 
+        $buku->kategori()->attach($request->kategori);
         return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan');
     }
     
@@ -58,7 +61,8 @@ class BukuController extends Controller
 
     public function edit($id) {
         $buku = Buku::findOrFail($id);
-        return view('buku.edit',compact('buku'));
+        $kategori = KategotiBuku::all();
+            return view('buku.edit',compact('buku','kategori'));
     }
 
     public function update(Request $request, $id) {
@@ -69,6 +73,8 @@ class BukuController extends Controller
             'tahun_terbit' => ['nullable', 'integer', 'digits:4', 'min:1000', 'max:' . date('Y')],
             'deskripsi' => ['nullable', 'string'],
             'gambar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'kategori' => ['nullable','array'],
+            'kategori.*' => ['exists:kategoti_bukus,id'],
         ]);
     
         $buku = Buku::findOrFail($id);
@@ -82,12 +88,14 @@ class BukuController extends Controller
         }
     
         $buku->update($data); 
+        $buku->kategori()->sync($request->kategori);
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui');
     }
     
 
     public Function destroy($id) {
         $buku = buku::findOrFail($id);
+        $buku->kategori()->detach();
         $buku->delete();
         return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus');
     }

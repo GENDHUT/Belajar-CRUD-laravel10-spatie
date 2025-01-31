@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\KategoriBukuController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UlasanBukuController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +44,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/admin', [PeminjamanController::class, 'admin'])->middleware(['auth', 'verified'])->name('admin');
 
-
-
-
 Route::resource('buku', BukuController::class);
 
 Route::resource('koleksi', KoleksiController::class);
@@ -51,6 +51,11 @@ Route::resource('koleksi', KoleksiController::class);
 Route::resource('ulasan', UlasanBukuController::class);
 
 Route::resource('peminjaman', PeminjamanController::class);
+
+Route::resource('kategori', KategoriBukuController::class);
+
+Route::resource('users', UserController::class);
+// Route::resource('users', UserController::class);
 
 
 require __DIR__.'/auth.php';

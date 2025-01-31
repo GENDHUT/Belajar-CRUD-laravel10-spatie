@@ -63,6 +63,18 @@
                                         <span>Tahun: <strong>{{ $item->tahun_terbit }}</strong></span>
                                     </div>
 
+                                    <!-- Kategori Buku -->
+                                    <div class="mt-3">
+                                        <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Kategori:</h5>
+                                        <div class="flex flex-wrap gap-2 mt-1">
+                                            @foreach ($item->kategori as $kat)
+                                                <span class="bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                                    {{ $kat->nama_kategori }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
                                     <!-- Aksi -->
                                     <div class="mt-4 flex space-x-2">
                                         <!-- Tombol Detail -->

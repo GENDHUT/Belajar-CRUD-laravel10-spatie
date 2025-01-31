@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Models\Buku;
+use App\Models\User;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+
 
 class PeminjamanController extends Controller
 {
@@ -18,16 +21,19 @@ class PeminjamanController extends Controller
         return view('peminjaman.index', compact('peminjaman'));
     }
 
-    public function admin()
+    public function admin(User $user)
     {
         if (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('operator')) {
             abort(403, 'Unauthorized action.');
         }
 
+
         $peminjaman = Peminjaman::with('user', 'buku')
         ->whereIn('status_peminjaman', ['Dipinjam', 'Dikembalikan'])
         ->get();
-        return view('admin', compact('peminjaman'));
+        $users = User::all();
+
+        return view('admin', compact('peminjaman','users'));
         
     }
 
@@ -78,11 +84,15 @@ class PeminjamanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        return view('Users.edit',compact('user','roles'));
     }
-
+    // public function edit(User $user)
+    // {
+       
+    // }
     /**
      * Update the specified resource in storage.
      */
@@ -101,15 +111,43 @@ class PeminjamanController extends Controller
     
     }
 
+    public function role(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => ['required','string','max:225'],
+            'role' => ['required','string','in:admin,operator,peminjam']
+
+        ]);
+
+        $user->name = $request->input('name');
+        $user->save();
+
+        $user->syncRoles($request->input('role'));
+        return redirect()->route('admin')->with('susccess','Role Berhasil di Rubah');
+
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        $peminjaman = Peminjaman::findOrFail($id);
-        $peminjaman->delete();
+        // $peminjaman = Peminjaman::findOrFail($id);
+        // $peminjaman->delete();
 
-        return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman dihapus.');
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('admin')->with('success', 'User Berhasil dihapus.');
     
     }
+
+    // public function user(string $id)
+    // {   
+    //     $user = User::findOrFail($id);
+    //     $user->delete();
+
+    //     return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman dihapus.');
+    
+    // }
+
 }
