@@ -1,0 +1,53 @@
+Tamplate spatie + Brezee
+->composer create-project laravel/laravel:^10.0 Namaprojek
+
+		Install Spatie Permission
+-> composer require spatie/laravel-permission
+   php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+   php artisan migrate
+   php artisan config:clear
+   php artisan migrate
+
+	#Tambahkan Trait HasRoles ke Model User
+->  Models/User.php => use HasRoles;
+
+	#Buat Seeder untuk Roles
+-> Di Seeder database folder buat DatabaseSeeder.php buat ngeseed semua seeder class
+   $this->call([
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+	    Tambahin seeder lain
+        ]);
+    Buat RolePermissionSeeder buat nampung role dan permision
+    	Role::create(['name' => 'admin']);
+        Role::create(['name'=>'pelanggan']); DLL
+
+    Seeder User/isi 
+	$admin = User::create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12341234')
+        ]);
+        $admin->assignRole('admin');	
+
+	#Tambahin Kernel $middlewareAliases Untuk Memisahkan Pages Berdasarkan Roles
+-> 'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+   'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+   'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+
+
+		Install Laravel Breeze
+-> composer require laravel/breeze --dev
+   php artisan breeze:install
+   npm install && npm run dev
+   php artisan migrate
+
+
+        Pengerjaan
+-> Pemisahan Halaman Berdasarkan Role
+	Route::get('/admin', function () {
+    		return view('admin');
+	})->middleware(['auth', 'verified','role:admin'])->name('admin');
+
+-> 
+-> Jalankan dan uji sistem sesuai role.
