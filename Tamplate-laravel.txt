@@ -51,3 +51,5 @@ Tamplate spatie + Brezee
 
 -> 
 -> Jalankan dan uji sistem sesuai role.
+
+->php artisan storage:link //untuk melink storage penyimpanan gambar dan db
