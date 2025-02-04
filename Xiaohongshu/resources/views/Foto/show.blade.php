@@ -42,7 +42,7 @@
                         
                         <!-- Tombol Navigasi -->
                         <div class="mt-6">
-                            <a href="{{ route('foto.index') }}" 
+                            <a href="{{ route('dashboard') }}" 
                                class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded shadow">
                                 Kembali
                             </a>

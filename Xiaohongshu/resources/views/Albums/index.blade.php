@@ -1,45 +1,49 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="mb-4 flex space-x-2">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Daftar Album</h3>
+                    <div class="mt-6 mb-6">
                         <a href="{{ route('albums.create') }}" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded" style="background-color: rgb(0, 217, 255); color:white;">
-                            Tambah Album
+                            Buat Album
                         </a>
                     </div>
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr class="bg-gray-100 dark:bg-gray-700">
-                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">No</th>
-                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Nama Album</th>
-                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Deskripsi</th>
-                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Tanggal Dibuat</th>
-                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($album as $item)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="py-2 px-4">{{ $loop->iteration }}</td>
-                                <td class="py-2 px-4">{{ $item->nama_album }}</td>
-                                <div style="max-width: 300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">
-                                    <td class="py-2 px-4">{{ $item->deskripsi }}</td>
+                    <!-- Grid Container: 1 kolom di mobile, 2 di sm, 4 di md ke atas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        @foreach ($album as $item)
+                            <a href="{{ route('albums.show', $item->id) }}" class="group block">
+                                <div class="relative rounded-lg overflow-hidden shadow-md">
+                                    @php
+                                        // Ambil foto pertama dari album, pastikan relasi di model Album bernama 'foto'
+                                        $firstFoto = $item->foto->first();
+                                    @endphp
+                                    <img src="{{ $firstFoto && $firstFoto->lokasi_file ? asset('storage/' . $firstFoto->lokasi_file) : asset('images/default-placeholder.jpg') }}" 
+                                         alt="Gambar {{ $item->nama_album }}" 
+                                         class="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-105">
+                                    
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-4">
+                                        <h4 class="text-lg font-bold text-white">
+                                            {{ $item->nama_album }}
+                                        </h4>
+                                        <p class="text-sm text-white">
+                                            {{ Str::limit($item->deskripsi, 150, '...') }}
+                                        </p>
+                                        <div class="text-xs text-gray-200 mt-1">
+                                            Tanggal Dibuat: <strong>{{ $item->created_at->format('d M Y') }}</strong>
+                                        </div>
+                                    </div>
                                 </div>
-                                <td class="py-2 px-4">{{ $item->created_at->format('d M Y') }}</td>
-                                <td class="py-2 px-4 flex space-x-2">
-                                    <a href="{{ route('albums.show', $item->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Detail</a>
-                                    <a href="{{ route('albums.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded">Edit</a>
-                                    <form action="{{ route('albums.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus album ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </a>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Tombol Kembali -->
+                    <div class="mt-6">
+                        <a href="{{ route('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded" style="background-color: rgb(0, 217, 255); color:white;">
+                            Kembali
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

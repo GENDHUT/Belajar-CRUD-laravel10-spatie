@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('foto', FotoController::class);
+Route::post('fotos/{foto}/like', [FotoController::class, 'like'])->name('fotos.like');
+Route::post('fotos/{foto}/comment', [FotoController::class, 'comment'])->name('fotos.comment');
 Route::resource('albums', AlbumController::class)->middleware('auth');
 
 

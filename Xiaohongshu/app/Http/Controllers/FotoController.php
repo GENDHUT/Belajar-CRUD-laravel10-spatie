@@ -24,7 +24,8 @@ use App\Models\Foto;
         public function dashboard()
         {
             $foto = Foto::all();
-            return view('dashboard', compact('foto'));
+            $album = Album::all();
+            return view('dashboard', compact('foto','album'));
         }
 
         /**
