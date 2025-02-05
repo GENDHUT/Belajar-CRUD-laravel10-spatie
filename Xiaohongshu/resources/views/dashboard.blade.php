@@ -38,6 +38,7 @@
                 <div class="p-6">
                     <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Daftar Foto</h3>
                     
+                    <!-- Grid Container: 1 kolom di mobile, 2 di sm, 4 di md ke atas -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         @foreach ($foto as $item)
                             <a href="{{ route('foto.show', $item->id) }}" class="group block">
@@ -56,6 +57,21 @@
                                         
                                         <div class="text-xs text-gray-200 mt-1">
                                             Tanggal Unggah: <strong>{{ $item->tanggal_unggah }}</strong>
+                                        </div>
+                                        
+                                        <!-- Tombol Like dan jumlah Like -->
+                                        <div class="mt-2 flex items-center space-x-2">
+                                            <form action="{{ route('foto.like', $item->id) }}" method="POST" onsubmit="event.stopPropagation();">
+                                                @csrf
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded text-xs" onclick="event.stopPropagation();">
+                                                    @if($item->likes->where('user_id', Auth::id())->count())
+                                                        Unlike
+                                                    @else
+                                                        Like
+                                                    @endif
+                                                </button>
+                                            </form>
+                                            <span class="text-xs text-white">{{ $item->likes->count() }} Likes</span>
                                         </div>
                                     </div>
                                 </div>

@@ -30,5 +30,15 @@ class Foto extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function likes()
+    {
+        return $this->hasMany(FotoLike::class, 'foto_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(FotoComment::class, 'foto_id');
+    }   
+
 
 }

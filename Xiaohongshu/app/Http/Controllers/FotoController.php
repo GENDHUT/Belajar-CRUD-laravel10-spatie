@@ -4,7 +4,8 @@
 
 use App\Models\Album;
 use App\Models\Foto;
-    use Illuminate\Http\Request;
+use App\Models\FotoComment;
+use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
 
     class FotoController extends Controller
@@ -19,6 +20,56 @@ use App\Models\Foto;
             // $foto = Foto::all(); -> mengambil semua data user
             // dd($foto->first()->toArray());
             return view('foto.index', compact('foto'));
+        }
+
+        public function like($id)
+        {
+            $foto = Foto::findOrFail($id);
+            $user = Auth::user();
+    
+            // Cek apakah user sudah like
+            $existingLike = $foto->likes()->where('user_id', $user->id)->first();
+    
+            if ($existingLike) {
+                // Unlike jika sudah ada
+                $existingLike->delete();
+                return back()->with('success', 'Like dihapus.');
+            } else {
+                // Like jika belum ada
+                $foto->likes()->create([
+                    'user_id' => $user->id,
+                ]);
+                return back()->with('success', 'Foto disukai.');
+            }
+        }
+
+        public function comment(Request $request, $id)
+        {
+            $request->validate([
+            'isi_komentar' => 'required|string|max:500',
+        ]);
+
+        $foto = Foto::findOrFail($id);
+
+        $foto->comments()->create([
+            'user_id' => Auth::id(),
+            'isi_komentar' => $request->isi_komentar,
+        ]);
+
+            return back()->with('success', 'Komentar berhasil ditambahkan.');
+        }
+
+        public function destroyComment($id)
+        {
+            $comment = FotoComment::findOrFail($id);
+
+            // Pastikan user hanya bisa menghapus komentarnya sendiri
+            if ($comment->user_id !== Auth::id()) {
+                return back()->with('error', 'Anda tidak memiliki izin untuk menghapus komentar ini.');
+            }
+
+            $comment->delete();
+            return back()->with('success', 'Komentar berhasil dihapus.');
         }
 
         public function dashboard()

@@ -34,8 +34,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('foto', FotoController::class);
-Route::post('fotos/{foto}/like', [FotoController::class, 'like'])->name('fotos.like');
-Route::post('fotos/{foto}/comment', [FotoController::class, 'comment'])->name('fotos.comment');
+Route::post('/foto/{id}/like', [FotoController::class, 'like'])->name('foto.like');
+Route::post('/foto/{id}/comment', [FotoController::class, 'comment'])->name('foto.comment');
+Route::delete('/foto/comment/{id}', [FotoController::class, 'destroyComment'])->name('foto.comment.destroy'); // Route untuk menghapus komentar
 Route::resource('albums', AlbumController::class)->middleware('auth');
 
 
