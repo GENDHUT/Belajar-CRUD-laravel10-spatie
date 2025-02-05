@@ -12,6 +12,11 @@
                         <p class="text-lg text-gray-800 dark:text-gray-200">{{ $album->deskripsi }}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">Tanggal Dibuat: <strong>{{ $album->created_at->format('d M Y') }}</strong></p>
                     </div>
+
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Pemilik: <strong>{{ $album->user->name }}</strong>
+                    </p>
+                    
                     
                     <!-- Daftar Foto dalam Album -->
                     <h4 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Foto dalam Album</h4>
