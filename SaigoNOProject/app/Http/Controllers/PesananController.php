@@ -14,8 +14,14 @@ class PesananController extends Controller
      */
     public function index()
     {
-        $pesanan = Pesanan::with(['menu', 'user'])->get();
+        $pesanan = Pesanan::with('menu')->where('user_id', auth()->id())->get();
         return view('pesanan.index', compact('pesanan'));
+    }
+
+    public function dashboard()
+    {
+        $pesanan = Pesanan::with('menu')->where('user_id', auth()->id())->get();
+        return view('dashboard', compact('pesanan'));
     }
 
     /**
@@ -36,11 +42,14 @@ class PesananController extends Controller
         $validatedData = $request->validate([
             'menu_id' => 'required|exists:menus,id',
             'user_id' => 'required|exists:users,id',
-            'jumlah'  => 'required|string'
+            'jumlah'  => 'required|string',
+            // 'status'  => 'required|in:Selesai,Proses',
         ]);
 
         Pesanan::create($validatedData);
-
+        if (auth()->user()->hasrole('pelanggan')) {
+            return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibuat.');
+        }
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
     
     }
@@ -48,18 +57,19 @@ class PesananController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pesanan $pesanan, $id)
+    public function show(Pesanan $pesanan)
     {
-        $pesanan = Pesanan::with(['menu', 'user'])->findOrFail($id);
+        // $pesanan = Pesanan::with(['menu', 'user']);
+        $pesanan->load(['menu', 'user']);
         return view('pesanan.show', compact('pesanan'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pesanan $pesanan, $id)
+    public function edit(Pesanan $pesanan)
     {
-        $pesanan = Pesanan::findOrFail($id);
+        // $pesanan = Pesanan::findOrFail($id);
         $menu = Menu::all();
         $user = User::all();
         return view('pesanan.edit', compact('pesanan', 'menu', 'user'));
@@ -68,15 +78,16 @@ class PesananController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pesanan $pesanan, $id)
+    public function update(Request $request, Pesanan $pesanan)
     {
         $validatedData = $request->validate([
             'menu_id' => 'required|exists:menus,id',
             'user_id' => 'required|exists:users,id',
-            'jumlah'  => 'required|string'
+            'jumlah'  => 'required|string',
+            'status'  => 'required|in:Selesai,Proses',
         ]);
 
-        $pesanan = Pesanan::findOrFail($id);
+        // $pesanan = Pesanan::findOrFail($id);
         $pesanan->update($validatedData);
 
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');

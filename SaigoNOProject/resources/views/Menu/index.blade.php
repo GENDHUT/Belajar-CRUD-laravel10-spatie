@@ -24,9 +24,9 @@
                                 <td class="py-2 px-4">{{ $item->nama_menu }}</td>
                                 <td class="py-2 px-4">{{ $item->harga }}</td>
                                 <td class="py-2 px-4 flex space-x-2">
-                                    <a href="{{ route('menu.show', $item->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">
+                                    {{-- <a href="{{ route('menu.show', $item->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">
                                         Detail
-                                    </a>
+                                    </a> --}}
                                     <a href="{{ route('menu.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded">
                                         Edit
                                     </a>

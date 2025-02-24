@@ -14,6 +14,7 @@ class Pesanan extends Model
         'menu_id',
         'user_id',
         'jumlah',
+        'status',
     ];
     
     public function menu()

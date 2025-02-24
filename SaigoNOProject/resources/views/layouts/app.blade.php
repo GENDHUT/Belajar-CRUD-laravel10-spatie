@@ -31,6 +31,13 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <footer class="bg-gray-800 text-white py-4 mt-8">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <p>&copy; {{ date('Y') }} GENDHUT. All rights reserved.</p>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,9 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [PesananController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
+// ->middleware(['auth', 'verified','role:admin'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,7 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('menu', MenuController::class);
+Route::resource('menu', MenuController::class)->middleware(['auth', 'verified','role:admin']);
 Route::resource('pesanan', PesananController::class);
+Route::resource('transaksi', TransaksiController::class)->middleware(['auth', 'verified','role:admin']);
+Route::resource('user', UserController::class)->middleware(['auth', 'verified','role:admin']);
 
 require __DIR__.'/auth.php';

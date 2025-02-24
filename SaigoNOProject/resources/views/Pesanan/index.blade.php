@@ -15,8 +15,8 @@
                                 <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Pesanan</th>
                                 <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">User</th>
                                 <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Harga Total</th>
+                                <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Status</th>
                                 <th class="py-2 px-4 text-left text-xs font-medium text-gray-700 dark:text-gray-100 uppercase tracking-wider">Aksi</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -32,12 +32,15 @@
                                             N/A
                                         @endif
                                     </td>
+                                    <td class="py-2 px-4">{{ $item->status ?? 'N/A' }}</td>
                                     <td class="py-2 px-4 flex space-x-2">
+                                        @if($item->status !== 'Selesai')
+                                            <a href="{{ route('pesanan.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded">
+                                                Edit
+                                            </a>
+                                        @endif
                                         <a href="{{ route('pesanan.show', $item->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">
                                             Detail
-                                        </a>
-                                        <a href="{{ route('pesanan.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded">
-                                            Edit
                                         </a>
                                         <form action="{{ route('pesanan.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pesanan ini?');">
                                             @csrf

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('menu_id');
             $table->unsignedBigInteger('user_id');
             $table->string('jumlah');
+            $table->enum('status', ['Selesai', 'Proses'])->default('Proses');
             $table->timestamps();
             $table->foreign('menu_id')->references('id')->on('Menus')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
